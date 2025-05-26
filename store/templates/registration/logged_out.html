@@ -1,0 +1,31 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">Logged Out</h2>
+    <div class="alert alert-success text-center">
+        <p>You have been successfully logged out.</p>
+    </div>
+    <div class="text-center">
+        <a href="{% url 'login' %}" class="btn btn-primary">Log In Again</a>
+        <a href="{% url 'home' %}" class="btn btn-secondary ml-2">Go to Homepage</a>
+    </div>
+    <p class="text-center mt-3">You will be redirected to the homepage in <span id="countdown">5</span> seconds...</p>
+</div>
+
+<script>
+    setTimeout(() => {
+        window.location.href = "{% url 'home' %}";
+    }, 5000);
+
+    let countdown = 5;
+    const countdownElement = document.getElementById('countdown');
+    const timer = setInterval(() => {
+        countdown -= 1;
+        countdownElement.textContent = countdown;
+        if (countdown <= 0) {
+            clearInterval(timer);
+        }
+    }, 1000);
+</script>
+{% endblock %}

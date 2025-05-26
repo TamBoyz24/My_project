@@ -1,0 +1,27 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+  <h1>Store Statistics</h1>
+  
+  <h2>Overview</h2>
+  <p>Total Orders: {{ total_orders }}</p>
+  <p>Total Revenue: ${{ total_revenue|floatformat:2 }}</p>
+  
+  <h2>Orders by Status</h2>
+  <ul>
+    {% for status in orders_by_status %}
+      <li>{{ status.status|title }}: {{ status.count }}</li>
+    {% empty %}
+      <li>No orders found.</li>
+    {% endfor %}
+  </ul>
+  
+  <h2>Top Products</h2>
+  <ul>
+    {% for product in top_products %}
+      <li>{{ product.name }} (Ordered {{ product.order_count }} times)</li>
+    {% empty %}
+      <li>No products ordered yet.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

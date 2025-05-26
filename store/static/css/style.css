@@ -1,0 +1,205 @@
+/* ========================= */
+/* ===== ALERT STYLES ===== */
+/* ========================= */
+
+.logout-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  background: linear-gradient(135deg, #e0f7fa, #ffffff);
+  padding: 20px;
+}
+
+.logout-content {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 40px;
+  max-width: 480px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.logout-content h2 {
+  color: #00796b;
+  margin-bottom: 16px;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.logout-content p {
+  color: #555;
+  font-size: 16px;
+}
+
+.logout-content a {
+  color: #009688;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.logout-content a:hover {
+  color: #004d40;
+}
+
+
+.alert {
+    position: relative;
+    padding: 16px 20px 16px 60px;
+    margin: 20px 0;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 500;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    transition: all 0.4s ease-in-out;
+}
+
+/* Icon bên trái */
+.alert::before {
+    content: '';
+    position: absolute;
+    left: 20px;
+    width: 24px;
+    height: 24px;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+/* Nút đóng */
+.alert .close-btn {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: inherit;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+.alert .close-btn:hover {
+    transform: scale(1.2);
+}
+
+/* SUCCESS */
+.alert-success {
+    background-color: #e9fbe7;
+    color: #276738;
+    border-left: 6px solid #43a047;
+}
+.alert-success::before {
+    background-image: url('https://cdn-icons-png.flaticon.com/512/190/190411.png');
+}
+
+/* WARNING */
+.alert-warning {
+    background-color: #fff4e5;
+    color: #9f6000;
+    border-left: 6px solid #ff9800;
+}
+.alert-warning::before {
+    background-image: url('https://cdn-icons-png.flaticon.com/512/1828/1828843.png');
+}
+
+/* ERROR */
+.alert-danger,
+.alert-error {
+    background-color: #fdecea;
+    color: #b71c1c;
+    border-left: 6px solid #f44336;
+}
+.alert-danger::before,
+.alert-error::before {
+    background-image: url('https://cdn-icons-png.flaticon.com/512/1828/1828665.png');
+}
+
+/* INFO */
+.alert-info {
+    background-color: #aad1ec;
+    color: #0d47a1;
+    border-left: 6px solid #2196f3;
+}
+.alert-info::before {
+    background-image: url('https://cdn-icons-png.flaticon.com/512/1828/1828817.png');
+}
+
+/* ========================= */
+/* ===== FOOTER STYLES ==== */
+/* ========================= */
+
+footer {
+    background-color: #255585;
+    color: #fff;
+    padding: 40px 0;
+    margin-top: 40px;
+    border-top: 1px solid #8b8b8b;
+}
+
+.footer-container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 15px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.footer-column {
+    flex: 1 1 200px;
+    margin: 15px;
+}
+
+.footer-column h5 {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #fff;
+}
+
+.footer-column ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-column ul li {
+    margin-bottom: 10px;
+}
+
+.footer-column ul li a {
+    color: #f0f0f0;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-column ul li a:hover {
+    color: #ffeb3b;
+    text-decoration: underline;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding: 20px 0;
+    font-size: 14px;
+    background-color: #1a3a5a;
+    color: #ddd;
+    margin-top: 20px;
+}
+
+/* Responsive Footer */
+@media (max-width: 576px) {
+    .footer-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footer-column {
+        margin: 10px 0;
+        text-align: center;
+    }
+}

@@ -1,0 +1,49 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>XIN CHÀO, {{ user.username }}!</h2>
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3">
+            <div class="list-group">
+                <a href="{% url 'profile' %}" class="list-group-item list-group-item-action active">Thông tin</a>
+                <a href="{% url 'profile' %}" class="list-group-item list-group-item-action">Địa Chỉ</a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9">
+            <div class="mb-3">
+                <a href="{% url 'add_address' %}" class="btn btn-primary">Địa chỉ mỚI</a>
+            </div>
+            <div class="row">
+                {% for address in addresses %}
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">ĐỊA CHỈ {{ forloop.counter }}</h5>
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="address_id" value="{{ address.id }}">
+                                <p><strong>Name:</strong> <input type="text" name="name" value="{{ address.name }}" class="form-control"></p>
+                                <p><strong>Locality:</strong> <input type="text" name="locality" value="{{ address.locality }}" class="form-control"></p>
+                                <p><strong>Mobile:</strong> <input type="text" name="mobile" value="{{ address.mobile }}" class="form-control"></p>
+                                <p><strong>City:</strong> <input type="text" name="city" value="{{ address.city }}" class="form-control"></p>
+                                <p><strong>State:</strong> <input type="text" name="state" value="{{ address.state }}" class="form-control"></p>
+                                <p><strong>Zipcode:</strong> <input type="text" name="zipcode" value="{{ address.zipcode }}" class="form-control"></p>
+                                <button type="submit" class="btn btn-dark">Update</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <p>Ko tìm thấy địa chỉ. yêu cầu add địa chỉ</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+  <h1>User Activity</h1>
+
+  <h2>Users with Active Carts</h2>
+  {% if users_with_carts %}
+    <table>
+      <thead>
+        <tr>
+          <th>User</th>
+          <th>Cart Created</th>
+          <th>Cart Updated</th>
+          <th>Items</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for cart in users_with_carts %}
+          <tr>
+            <td>{{ cart.user.username }}</td>
+            <td>{{ cart.created_at }}</td>
+            <td>{{ cart.updated_at }}</td>
+            <td>
+              <ul>
+                {% for item in cart.items.all %}
+                  <li>{{ item.quantity }} x {{ item.product.name }}</li>
+                {% empty %}
+                  <li>Empty cart</li>
+                {% endfor %}
+              </ul>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No active carts found.</p>
+  {% endif %}
+
+  <h2>Order History</h2>
+  {% if users_with_orders %}
+    <table>
+      <thead>
+        <tr>
+          <th>User</th>
+          <th>Order ID</th>
+          <th>Total Price</th>
+          <th>Status</th>
+          <th>Created</th>
+          <th>Items</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in users_with_orders %}
+          <tr>
+            <td>{{ order.user.username }}</td>
+            <td>{{ order.id }}</td>
+            <td>${{ order.total_price|floatformat:2 }}</td>
+            <td>{{ order.status|title }}</td>
+            <td>{{ order.created_at }}</td>
+            <td>
+              <ul>
+                {% for item in order.items.all %}
+                  <li>{{ item.quantity }} x {{ item.product.name }}</li>
+                {% empty %}
+                  <li>No items</li>
+                {% endfor %}
+              </ul>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No orders found.</p>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends 'store/base.html' %}
+{% load static cart_tags %}
+
+{% block title %}Xác Nhận Đơn Hàng | BoyzShopp{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">Xác Nhận Đơn Hàng</h2>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show mt-3" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true"> ×  </span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4>Order #{{ order.id }} - {{ order.status|title }}</h4>
+            <p class="mb-0">Đặt trên: {{ order.created_at|date:"F d, Y H:i" }}</p>
+        </div>
+        <div class="card-body">
+            <!-- Order Items -->
+            <h5>Đơn hàng đã đặt hàng</h5>
+            {% for item in order.items.all %}
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="d-flex align-items-center">
+                        {% with image=item.product.images.first %}
+                            <img src="{% if image %}{{ image.image.url }}{% else %}{% static 'images/placeholder.jpg' %}{% endif %}" 
+                                 alt="{{ item.product.name|default:'Product Image' }}" 
+                                 style="width: 80px; height: 80px; object-fit: cover; margin-right: 15px;">
+                        {% endwith %}
+                        <div>
+                            <h6 class="mb-1">
+                                <a href="{% url 'product_detail' item.product.id %}" class="text-dark">{{ item.product.name }}</a>
+                            </h6>
+                            <p class="mb-0 text-muted"> {{ item.price }} x {{ item.quantity }} VND.</p>
+                        </div>
+                    </div>
+                    <p class="mb-0 font-weight-bold"> {{ item.price|multiply:item.quantity }} VND.</p>
+                </div>
+            {% endfor %}
+            <hr>
+
+            <!-- Order Summary -->
+            <div class="d-flex justify-content-between">
+                <span>Phí</span>
+                <span> {{ order.items.all|aggregate_subtotal|floatformat:2 }} VND.</span>
+            </div>
+            <div class="d-flex justify-content-between">
+                <span>Vận chuyển</span>
+                <span> {{ shipping|floatformat:2 }} VND.</span>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between font-weight-bold">
+                <span>Tổng Thu ( và phụ phí)</span>
+                <span> {{ order.total_price|floatformat:2 }} VND.</span>
+            </div>
+
+            <!-- Delivery Address -->
+            <h5 class="mt-4">Địa chỉ giao hàng</h5>
+            {% if order.address %}
+                <p class="mb-0">{{ order.address.name }}</p>
+                <p class="mb-0">{{ order.address.locality }}, {{ order.address.city }}, {{ order.address.state }} {{ order.address.zipcode }}</p>
+                <p class="mb-0">SĐT: {{ order.address.mobile }}</p>
+            {% else %}
+                <p class="text-muted">Không có địa chỉ liên quan (liên hệ bộ phận hỗ trợ).</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="text-center">
+        <a href="{% url 'home' %}" class="btn btn-primary mr-2">Tiếp tục mua sắm</a>
+        <a href="{% url 'profile' %}" class="btn btn-outline-primary">Xem hồ sơ</a>
+    </div>
+</div>
+{% endblock %}

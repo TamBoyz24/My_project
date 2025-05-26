@@ -1,0 +1,133 @@
+{% extends 'store/base.html' %}
+{% load static cart_tags %}
+
+{% block title %}Cart | BoyzShopp{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">GIỏ hàng</h2>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show mt-3" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    <div class="row mt-4">
+        <!-- Cart Items -->
+        <div class="col-md-8">
+            <h4>Cart ({{ cart_items.count }} item{{ cart_items.count|pluralize }})</h4>
+            {% if cart_items %}
+                {% for item in cart_items %}
+                    <div class="card mb-3">
+                        <div class="row no-gutters">
+                            <div class="col-md-4">
+                                {% with image=item.product.images.first %}
+                                    <img src="{% if image %}{{ image.image.url }}{% else %}{% static 'images/placeholder.jpg' %}{% endif %}" 
+                                        class="card-img" alt="{{ item.product.name|default:'Product Image' }}" 
+                                        style="height: 200px; object-fit: cover;">
+                                {% endwith %}
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <a href="{% url 'product_detail' item.product.id %}" class="text-dark">{{ item.product.name }}</a>
+                                    </h5>
+                                    <p class="card-text">{{ item.product.description|default:"No description available."|truncatewords:20 }}</p>
+                                    <form method="post" action="{% url 'update_cart' item.product.id %}" class="d-inline">
+                                        {% csrf_token %}
+                                        <label for="quantity-{{ item.product.id }}">Số lượng:</label>
+                                        
+                                        <div class="input-group" style="width: 120px;">
+                                            <!-- Nút giảm -->
+                                            <button type="button" class="btn btn-sm btn-danger" id="decrease-btn-{{ item.product.id }}" 
+                                                    {% if item.product.stock == 0 %}disabled{% endif %}>-</button>
+                                            
+                                            <!-- Số lượng -->
+                                            <input type="text" name="quantity" id="quantity-{{ item.product.id }}" 
+                                                value="{{ item.quantity }}" min="1" max="{{ item.product.stock }}" 
+                                                class="form-control text-center" style="width: 60px;" 
+                                                {% if item.product.stock == 0 %}disabled{% endif %} readonly>
+                                            
+                                            <!-- Nút tăng -->
+                                            <button type="button" class="btn btn-sm btn-success" id="increase-btn-{{ item.product.id }}" 
+                                                    {% if item.product.stock == 0 %}disabled{% endif %}>+</button>
+                                        </div>
+                                        
+                                        <button type="submit" class="btn btn-sm btn-warning ml-1" 
+                                                {% if item.product.stock == 0 %}disabled{% endif %}>Cập nhật</button>
+                                    </form>
+                                    <a href="{% url 'remove_from_cart' item.product.id %}" class="btn btn-sm btn-danger ml-2">Xóa</a>
+                                    <p class="card-text mt-2">
+                                        <strong>
+                                            VND. {{ item.product.price }} x {{ item.quantity }} = 
+                                            VND. {{ item.product.price|multiply:item.quantity }}
+                                        </strong>
+                                    </p>
+                                    {% if item.product.stock == 0 %}
+                                        <p class="text-danger">hết hàng.</p>
+                                    {% elif item.product.stock < item.quantity %}
+                                        <p class="text-warning">Only {{ item.product.stock }} chỉ còn.</p>
+                                    {% endif %}
+                                </div>
+                                
+                                <!-- Thêm JavaScript để điều khiển tăng giảm số lượng -->
+                                <script>
+                                    document.getElementById('increase-btn-{{ item.product.id }}').addEventListener('click', function() {
+                                        let quantityField = document.getElementById('quantity-{{ item.product.id }}');
+                                        let quantity = parseInt(quantityField.value);
+                                        let stock = {{ item.product.stock }};
+                                        
+                                        if (quantity < stock) {
+                                            quantityField.value = quantity + 1;
+                                        }
+                                    });
+                                
+                                    document.getElementById('decrease-btn-{{ item.product.id }}').addEventListener('click', function() {
+                                        let quantityField = document.getElementById('quantity-{{ item.product.id }}');
+                                        let quantity = parseInt(quantityField.value);
+                                        
+                                        if (quantity > 1) {
+                                            quantityField.value = quantity - 1;
+                                        }
+                                    });
+                                </script>
+                                
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                <a href="{% url 'clear_cart' %}" class="btn btn-danger mt-3">Xóa hết</a>
+            {% else %}
+                <div class="card">
+                    <div class="card-body text-center">
+                        <p>Giỏ trống. <a href="{% url 'home' %}">mua lại</a>.</p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Total Amount -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h4>Tổng</h4>
+                    <p>Tổng số tiền: VND. {{ total|floatformat:2 }}</p>
+                    <p>Phí ship: VND. {{ shipping|floatformat:2 }}</p>
+                    <hr>
+                    <h5>Tổng thanh toán (bạn cần chuẩn bị số tiền trước): VND. {{ grand_total|floatformat:2 }}</h5>
+                    {% if cart_items %}
+                    <a href="{% url 'checkout' %}" class="btn btn-info btn-block">Thanh toán</a>
+
+                    {% else %}
+                        <button class="btn btn-green btn-block" disabled>toán</button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Thêm Địa Chỉ Khác</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="name">Tên người nhận</label>
+            <input type="text" name="name" id="name" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="locality">Địa phương</label>
+            <input type="text" name="locality" id="locality" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="mobile">SĐT</label>
+            <input type="text" name="mobile" id="mobile" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="city">Thành Phố</label>
+            <input type="text" name="city" id="city" class="form-control" required>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Thêm địa chỉ</button>
+        <a href="{% url 'profile' %}" class="btn btn-secondary ml-2">Thoát</a>
+    </form>
+</div>
+{% endblock %}
